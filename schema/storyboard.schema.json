@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Heritage Short storyboard",
+  "type": "object",
+  "required": ["title", "audience", "intent", "language", "style_block", "character", "models", "shots", "music", "end_card"],
+  "properties": {
+    "title": {"type": "string", "minLength": 1},
+    "audience": {"type": "string", "minLength": 1},
+    "intent": {"type": "string", "minLength": 1},
+    "language": {"type": "string", "description": "Narration language, e.g. Amharic"},
+    "style_block": {"type": "string", "description": "Appended to every image prompt"},
+    "character": {
+      "type": "object",
+      "required": ["name", "description", "reference_prompt", "seed"],
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "reference_prompt": {"type": "string"},
+        "seed": {"type": "integer"}
+      }
+    },
+    "models": {
+      "type": "object",
+      "required": ["tts", "tts_voice", "tts_style", "image"],
+      "properties": {
+        "tts": {"type": "string"},
+        "tts_voice": {"type": "string"},
+        "tts_style": {"type": "string"},
+        "image": {"type": "string"}
+      }
+    },
+    "shots": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": ["id", "duration", "reason", "shot_size", "image_prompt", "motion_prompt", "seed", "narration", "subtitle_en", "camera"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^s[0-9]{2}$"},
+          "duration": {"type": "number", "minimum": 3, "maximum": 12},
+          "reason": {"type": "string", "minLength": 5},
+          "shot_size": {"enum": ["extreme_wide", "wide", "medium", "medium_close", "close", "extreme_close", "insert"]},
+          "image_prompt": {"type": "string", "minLength": 5},
+          "motion_prompt": {"type": "string"},
+          "seed": {"type": "integer"},
+          "narration": {"type": "string"},
+          "subtitle_en": {"type": "string"},
+          "camera": {"enum": ["push_in", "pull_out", "pan_left", "pan_right", "static"]},
+          "use_character": {"type": "boolean"}
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": ["caption", "bpm", "key", "cues"],
+      "properties": {
+        "caption": {"type": "string"},
+        "bpm": {"type": "integer", "minimum": 40, "maximum": 200},
+        "key": {"type": "string"},
+        "chosen_file": {"type": "string"},
+        "cues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["start_shot", "description"],
+            "properties": {"start_shot": {"type": "string"}, "description": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "end_card": {
+      "type": "object",
+      "required": ["text", "duration"],
+      "properties": {"text": {"type": "string"}, "duration": {"type": "number", "minimum": 2, "maximum": 5}}
+    }
+  }
+}
